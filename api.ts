@@ -4,10 +4,10 @@ export const api = {
   "routes": [
     {
       "method": "GET",
-      "url": "/test",
+      "url": "/ping",
       "response": {
           "status": 200,
-          "body": ["ssass"],
+          "body": "pong",
       },
     },
   ],
