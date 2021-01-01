@@ -6,7 +6,7 @@
 ## Installation
 ```
 git clone https://github.com/kemalelmizan/mock.git
-echo "alias mock=\"deno run --allow-read --allow-run $(pwd)/mock/wrapper.ts\"" >> ~/.bashrc # or ~/.zshrc
+echo "alias mock=\"cd $(pwd)/mock && deno run --allow-read --allow-run ./wrapper.ts\"" >> ~/.bashrc # or ~/.zshrc
 source ~/.bashrc # or ~/.zshrc
 ```
 
