@@ -1,8 +1,8 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 import { parse } from "https://deno.land/std/flags/mod.ts";
 
-const { args } = Deno
-const { api } = await import(parse(args)?.["c"] ?? "./api.ts")
+const { cwd, args } = Deno
+const { api } = await import(`file:///${parse(args)?.["c"] ?? `${cwd()}/api.ts`}`)
 
 const server = serve({ hostname: api.hostname, port: api.port });
 console.log(api, args);

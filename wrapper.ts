@@ -18,9 +18,8 @@ if (carg && typeof carg !== "string") {
 }
 
 let process = run({ cmd })
-const watcher = watchFs(".");
+const watcher = watchFs([".", ...(carg ? [carg] : [])]);
 let reloading = false;
-
 for await (const event of watcher) {
     if (!reloading && event.kind === "modify") {
         reloading = true;

@@ -9,7 +9,7 @@ Live-reloads the mock server if API config changes.
 ## Installation
 ```
 git clone https://github.com/kemalelmizan/mock.git
-echo "alias mock=\"cd $(pwd)/mock && deno run --allow-read --allow-run ./wrapper.ts || cd -\"" >> ~/.bashrc # or ~/.zshrc
+echo "function mock() { cd /d/github/mock && deno run --allow-read --allow-run ./wrapper.ts $@ || cd -; }" >> ~/.bashrc # or ~/.zshrc
 source ~/.bashrc # or ~/.zshrc
 ```
 
@@ -21,16 +21,22 @@ mock -c
 ```
 
 ### Running server
+Using default `api.ts` in project directory
 ```
 mock
+```
+Using custom `api.ts`
+```
+mock -c /path/to/api.ts
 ```
 Test by curl-ing ping endpoint on another terminal window
 ```
 curl localhost:8080/ping
 ```
 
-## Checklist
+## Todo
 - [x] mocking api.ts
 - [x] live-reload with wrapper
-- [x] open api.ts file
+- [x] open `api.ts` file
+- [x] use custom `api.ts` file
 - [ ] documentation
