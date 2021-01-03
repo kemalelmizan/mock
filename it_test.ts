@@ -10,13 +10,15 @@ test({
   async fn() {
     const p = run({
       cmd: ["deno", "run", "--allow-all", "wrapper.ts", "-c"],
+      stdin: "null",
       stdout: "piped",
+      stderr: "null"
     });
     const status = await p.status();
     const output = String.fromCharCode.apply(null, [...(await p.output())]);
     console.log(p, status, output);
     p.close();
     assertEquals(status.success, true);
-    assertStringIncludes(output, "Opening");
+    assertStringIncludes(output, "pening");
   },
 });

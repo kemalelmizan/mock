@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }} # runs a test on Ubuntu, Windows and macOS
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -25,4 +26,5 @@ jobs:
           deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
 
       - name: Run Test
+        timeout-minutes: 2
         run: deno test --allow-all --fail-fast --coverage --unstable

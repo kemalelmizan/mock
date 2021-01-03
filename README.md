@@ -1,4 +1,6 @@
 # mock
+![ci](https://github.com/kemalelmizan/mock/workflows/ci/badge.svg?branch=main)
+
 
 No-dependency api server in your local machine with 1 file route configuration.
 Live-reloads the mock server if API config changes.
