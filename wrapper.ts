@@ -1,6 +1,6 @@
 import { parse } from "https://deno.land/std/flags/mod.ts";
 
-const { build, env, cwd, exit, run, args, watchFs } = Deno;
+const { errors, build, env, cwd, exit, run, args, watchFs } = Deno;
 
 const cmd = [
   "deno",
@@ -16,13 +16,20 @@ if (carg && typeof carg !== "string") {
   const api = `${cwd()}/api.ts`;
   console.log(`Opening ${api}`);
   try {
-    const ed = /^win/.test(build.target) ? "notepad" : "vim";
-    const editor = env.get("VISUAL") || env.get("EDITOR") || ed;
-    const arg = editor.split(/\s+/);
-    const bin = arg.shift();
-    run({ cmd: ["code" ?? bin, api] });
+    run({ cmd: ["code", api] });
   } catch (error) {
-    console.error("Some error occured: ", error);
+    if (/^NotFound/.test(String(error))) {
+      console.warn("code not found in path, opening with default editor...");
+      const editor =
+        env.get("VISUAL") || env.get("EDITOR") || /windows/.test(build.target)
+          ? "notepad"
+          : "vim";
+      try {
+        run({ cmd: [editor, api] });
+      } catch (error) {
+        console.error(editor, error);
+      }
+    }
   }
   exit();
 }
