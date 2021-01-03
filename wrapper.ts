@@ -1,6 +1,6 @@
 import { parse } from "https://deno.land/std/flags/mod.ts";
 
-const { errors, build, env, cwd, exit, run, args, watchFs } = Deno;
+const { build, env, cwd, exit, run, args, watchFs } = Deno;
 
 const cmd = [
   "deno",
