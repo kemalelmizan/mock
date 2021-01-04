@@ -11,6 +11,7 @@ Live-reloads the mock server if API config changes.
 ## Installation
 ```
 git clone https://github.com/kemalelmizan/mock.git
+cp mock/api_sample.ts mock/api.ts
 echo "function mock() { cd $(pwd)/mock && deno run --allow-env --allow-read --allow-run ./wrapper.ts \$@ || cd -; }" >> ~/.bashrc # or ~/.zshrc
 source ~/.bashrc # or ~/.zshrc
 ```
