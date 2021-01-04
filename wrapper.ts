@@ -1,4 +1,5 @@
 import { parse } from "https://deno.land/std/flags/mod.ts";
+import { existsSync } from "https://deno.land/std/fs/exists.ts";
 
 const { build, env, cwd, exit, run, args, watchFs } = Deno;
 
@@ -21,9 +22,12 @@ if (carg && typeof carg !== "string") {
     if (/^NotFound/.test(String(error))) {
       console.warn("code not found in path, opening with default editor...");
       const editor =
-        env.get("VISUAL") || env.get("EDITOR") || /windows/.test(build.target)
+        env.get("VISUAL") ||
+        env.get("EDITOR") ||
+        (/windows/.test(build.target) &&
+        !existsSync("C:\\Program Files\\Git\\usr\\bin\\vim.exe")
           ? "notepad"
-          : "vim";
+          : "vim");
       try {
         run({ cmd: [editor, api] });
       } catch (error) {
