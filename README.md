@@ -42,4 +42,8 @@ curl localhost:8080/ping
 - [x] live-reload with wrapper
 - [x] open `api.ts` file
 - [x] use custom `api.ts` file
+- [ ] use [`deno bundle`](https://deno.land/manual@v1.6.3/tools/bundler) and [`deno install`](https://deno.land/manual/tools/script_installer) instead of appending to .bashrc
 - [ ] documentation
+
+## License
+[MIT](./LICENSE)
