@@ -7,9 +7,24 @@ const { api } = await import(
 );
 
 const server = serve({ hostname: api.hostname, port: api.port });
+// const server = Deno.listenTls({
+//   hostname: api.hostname,
+//   port: api.port,
+//   alpnProtocols: ["h2", "http/1.1"],
+// });
 console.log(api, args);
+const decoder = new TextDecoder();
 
 for await (const request of server) {
+  const bodyBuf = await Deno.readAll(request.body);
+  const requestBody = decoder.decode(bodyBuf);
+  let requestBodyObject:any = requestBody;
+  try {
+    requestBodyObject = JSON.parse(requestBody)
+  }
+  catch(e){
+    console.log(e)
+  }
 
   // preflight
   if (request.method === "OPTIONS") {
@@ -22,19 +37,48 @@ for await (const request of server) {
     continue;
   }
 
-  const route = api.routes.filter(
+  // filter routes with same URL and methods
+  const routesWithSameURLMethods = api.routes.filter(
     (route: { url: string; method: string }) =>
       route.method === request.method && route.url === request.url
   );
-  const response = route.length === 0 ? api?.not_found : route?.[0]?.response;
-  response.body =
-    typeof response.body === "string"
-      ? response.body
-      : JSON.stringify(response.body) + "\n";
-  response.headers = new Headers({
-    ...api?.global?.headers,
-    ...response.headers,
-  });
-  console.log(`${new Date()}`, request.method, request.url, ">", response);
+
+  let response = api?.not_found;
+
+  if (routesWithSameURLMethods.length > 0) {
+    let chosenRoute: any;
+    let foundChosenRouteWithBody: boolean = false;
+
+    routesWithSameURLMethods.map(
+      (route: { url: string; method: string, body: string }) => {
+        if (route.body && JSON.stringify(route.body) === JSON.stringify(requestBodyObject)) {
+          foundChosenRouteWithBody = true;
+          chosenRoute = route;
+        }
+      });
+    if (!foundChosenRouteWithBody) chosenRoute = routesWithSameURLMethods.filter((route: { body: any }) => route.body === undefined)[0];
+
+    response = chosenRoute === undefined
+      ? api?.not_found
+      : chosenRoute?.response;
+  }
+
+  response.headers = new Headers(Object
+    .assign(response?.headers || {},
+      api?.global?.headers))
+
+  if (response.body)
+    response.body =
+      typeof response.body === "string"
+        ? response.body
+        : JSON.stringify(response.body) + "\n";
+
+  console.log(`${new Date()}\n`,
+    request.method, request.url, "\n",
+    // decoder.decode(await Deno.readAll(request.r)), "\n",
+    request.headers, "\n",
+    requestBody, "\n",
+    ">", response);
   request.respond({ ...response });
+  // request.end()
 }
