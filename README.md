@@ -10,10 +10,13 @@ Live-reloads the mock server if API config changes.
 
 ## Installation
 ```
+curl -fsSL https://deno.land/x/install/install.sh | sh
 git clone https://github.com/kemalelmizan/mock.git
-cp mock/api_sample.ts mock/api.ts
-echo "function mock() { cd $(pwd)/mock && deno run --allow-env --allow-read --allow-run ./wrapper.ts \$@ || cd -; }" >> ~/.bashrc # or ~/.zshrc
-source ~/.bashrc # or ~/.zshrc
+cd mock
+cp api_sample.ts api.ts
+echo "function mock() { cd $(pwd) && deno run --allow-env --allow-read --allow-run ./wrapper.ts \$@ || cd -; }" >> ~/.zshrc
+source ~/.zshrc
+mock
 ```
 
 ## Usage
